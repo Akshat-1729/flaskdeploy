@@ -38,13 +38,6 @@ def preprocess_frame(frame):
     return normalized_frame
 
 
-def generate_alarm_tone(duration_seconds=1):
-    sample_rate = 44100
-    frequency = 440
-    t = np.linspace(0, duration_seconds, int(
-        sample_rate * duration_seconds), endpoint=False)
-    alarm_tone = 0.5 * np.sin(2 * np.pi * frequency * t)
-    return (alarm_tone * 32767).astype(np.int16)
 
 
 def get_predicted_frames(video_path):
@@ -84,7 +77,7 @@ def predict_frames(video_file_path, output_file_path, SEQUENCE_LENGTH):
 
         if len(frames_queue) == SEQUENCE_LENGTH:
             predicted_labels_probabilities = my_model.predict([frames_queue])[0]
-            predicted_label = max(enumerate(predicted_labels_probabilities),key=lambda x: x[1])[0])
+            predicted_label = max(enumerate(predicted_labels_probabilities),key=lambda x: x[1])[0]
             predicted_class_name = CLASSES_LIST[predicted_label]
             print("Predicted class name:", predicted_class_name)
             print("Predicted probabilities:", predicted_labels_probabilities)
