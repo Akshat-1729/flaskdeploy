@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt  # Add matplotlib import
 from flask import Flask, render_template, request, redirect, flash, send_from_directory
 from werkzeug.utils import secure_filename
 from keras.models import load_model
-import numpy as np
 import cv2
 from collections import deque
 
@@ -84,9 +83,8 @@ def predict_frames(video_file_path, output_file_path, SEQUENCE_LENGTH):
         frames_queue.append(normalized_frame)
 
         if len(frames_queue) == SEQUENCE_LENGTH:
-            predicted_labels_probabilities = my_model.predict(
-                np.expand_dims(frames_queue, axis=0))[0]
-            predicted_label = np.argmax(predicted_labels_probabilities)
+            predicted_labels_probabilities = my_model.predict([frames_queue])[0]
+            predicted_label = max(enumerate(predicted_labels_probabilities),key=lambda x: x[1])[0])
             predicted_class_name = CLASSES_LIST[predicted_label]
             print("Predicted class name:", predicted_class_name)
             print("Predicted probabilities:", predicted_labels_probabilities)
